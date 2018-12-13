@@ -18,3 +18,5 @@ make_project_dir <- function() {
     
     dir_ls()
 }
+
+make_project_dir
