@@ -82,3 +82,49 @@ dept_job_role_tbl %>%
     )
   )
 
+# 1D. Uncover Problems and Opportunities ----
+
+calculate_attrition_costs <- function(
+  
+  # Employee
+  n                     = 1,
+  salary                = 80000,
+  
+  #Direct Costs
+  separation_cost       = 500,
+  vacancy_cost          = 10000,
+  acquisition_cost      = 4900,
+  placement_cost        = 3500,
+  
+  #Lost Productivity
+  net_revenue_per_employee  =	250000,
+  workdays_per_year         = 240,
+  workdays_postition_open   = 40,
+  workdays_onboarding       = 60,
+  onboarding_efficiency     = 0.50
+  
+) {
+  
+  #Direct Costs
+  direct_cost <- sum(separation_cost, vacancy_cost, acquisition_cost, placement_cost)
+  
+  #Lost Productivity Costs
+  productivity_cost <- net_revenue_per_employee / workdays_per_year * 
+    (workdays_postition_open + workdays_onboarding * onboarding_efficiency)
+  
+  #Savings of Salary & Benefits
+  salary_benefit_reduction <- salary / workdays_per_year * workdays_postition_open
+  
+  # Estimated Turnover per Employee
+  cost_per_employee <- direct_cost + productivity_cost - salary_benefit_reduction
+  
+  #total Cost of employee Turnover
+  total_cost <- n * cost_per_employee
+  
+  return(total_cost)
+}
+
+
+
+
+
