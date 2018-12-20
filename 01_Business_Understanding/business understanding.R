@@ -151,3 +151,78 @@ dept_job_role_tbl %>%
                                      salary = 80000)
   )
 
+# Workflow of Attrition ----
+
+###replacing the first two parts with functions.
+
+dept_job_role_tbl %>% 
+  #group_by(Department, JobRole, Attrition) %>% 
+  #summarise(n = n()) %>% 
+  #ungroup() %>% 
+  count(JobRole, Attrition) %>% 
+  
+  #group_by(JobRole) %>% 
+  #mutate(pct = n / sum(n)) %>% 
+  #ungroup() %>% 
+  count_to_pct(JobRole) %>% 
+  
+  filter(Attrition %in% c("Yes")) %>% 
+  arrange(desc(pct)) %>% 
+  mutate(
+    above_industry_avg = case_when(
+      pct > 0.08 ~ "Yes",
+      TRUE ~ "No"
+    )
+  ) %>% 
+  
+  mutate(
+    cost = calculate_attrition_costs(n = n, 
+                                     salary = 80000)
+  )
+
+count_to_pct <- function(data, ..., col = n) {
+  
+  grouping_vars_expr <- quos(...)
+  col_expr <- enquo(col)
+  
+  ret <- data %>% 
+    group_by(!!!grouping_vars_expr) %>% 
+    mutate(pct = (!! col_expr) / sum(!! col_expr)) %>% 
+    ungroup()
+  
+  return(ret)
+}
+
+###replacing the 3rd part with a function
+dept_job_role_tbl %>% 
+  
+  count(Department, JobRole, Attrition) %>% 
+  
+  count_to_pct(Department, JobRole) %>% 
+  
+  filter(Attrition %in% c("Yes")) %>% 
+  arrange(desc(pct)) %>% 
+  mutate(
+    above_industry_avg = case_when(
+      pct > 0.08 ~ "Yes",
+      TRUE ~ "No"
+    )
+  ) %>% 
+  
+  mutate(
+    cost = calculate_attrition_costs(n = n, 
+                                     salary = 80000)
+  )
+
+assess_attrition <- function(data, attrition_col, attrition_value, baseline_pct) {
+ 
+  data %>% 
+    filter(Attrition %in% c("Yes")) %>% 
+    arrange(desc(pct)) %>% 
+    mutate(
+      above_industry_avg = case_when(
+        pct > 0.08 ~ "Yes",
+        TRUE ~ "No"
+      )
+    )
+}
