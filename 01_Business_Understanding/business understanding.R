@@ -7,6 +7,7 @@ library(tidyquant)
 library(readxl)
 library(forcats)
 library(stringr)
+library(formattable)
 
 #load data
 path_train <- "00_Data/telco_train.xlsx"
@@ -42,7 +43,9 @@ dept_job_role_tbl %>%
   group_by(Department, Attrition) %>% 
   summarise(n = n()) %>% 
   ungroup() %>% 
-  
+# mutate(pct = n / sum(n)) 
+# need to group by department otherwise we have percent of total
+# grouping by department gives us the percentage within a department. 
   group_by(Department) %>% 
   mutate(pct = n / sum(n)) 
 
@@ -79,10 +82,8 @@ dept_job_role_tbl %>%
   arrange(desc(pct)) %>% 
   mutate(
     above_industry_avg = case_when(
-      pct > 0.08 ~ "Yes",
-      TRUE ~ "No"
-    )
-  )
+      pct > 0.088 ~ "Yes",
+      TRUE ~ "No")) 
 
 # 1D. Uncover Problems and Opportunities ----
 
@@ -121,7 +122,7 @@ calculate_attrition_costs <- function(
   cost_per_employee <- direct_cost + productivity_cost - salary_benefit_reduction
   
   #total Cost of employee Turnover
-  total_cost <- n * cost_per_employee
+  total_cost <- n * currency(cost_per_employee)
   
   return(total_cost)
 }
@@ -146,10 +147,8 @@ dept_job_role_tbl %>%
     )
   ) %>% 
   
-  mutate(
-    cost = calculate_attrition_costs(n = n, 
-                                     salary = 80000)
-  )
+  mutate(cost = calculate_attrition_costs(n = n, 
+                                          salary = 80000))
 
 # Workflow of Attrition ----
 
@@ -226,3 +225,4 @@ assess_attrition <- function(data, attrition_col, attrition_value, baseline_pct)
       )
     )
 }
+
