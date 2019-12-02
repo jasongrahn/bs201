@@ -170,14 +170,11 @@ dept_job_role_tbl %>%
   mutate(
     above_industry_avg = case_when(
       pct > 0.08 ~ "Yes",
-      TRUE ~ "No"
-    )
-  ) %>% 
+      TRUE ~ "No")) %>% 
   
   mutate(
     cost = calculate_attrition_costs(n = n, 
-                                     salary = 80000)
-  )
+                                     salary = 80000))
 
 count_to_pct <- function(data, ..., col = n) {
   
@@ -202,16 +199,14 @@ dept_job_role_tbl %>%
   mutate(
     above_industry_avg = case_when(
       pct > 0.08 ~ "Yes",
-      TRUE ~ "No"
-    )
-  ) %>% 
+      TRUE ~ "No")) %>% 
   
   mutate(
     cost = calculate_attrition_costs(n = n, 
-                                     salary = 80000)
-  )
+                                     salary = 80000))
 
-assess_attrition <- function(data, attrition_col, attrition_value, baseline_pct) {
+assess_attrition <- function(data, attrition_col, attrition_value, baseline_pct) 
+  {
   attrition_col_expr <- enquo(attrition_col)
   data %>% 
     filter((!! attrition_col_expr) %in% attrition_value) %>% 
@@ -219,23 +214,17 @@ assess_attrition <- function(data, attrition_col, attrition_value, baseline_pct)
     mutate(
       above_industry_avg = case_when(
         pct > baseline_pct ~ "Yes",
-        TRUE ~ "No"
-      )
-    )
-}
-
-<<<<<<< HEAD
-=======
+        TRUE ~ "No"))
+  }
+  
 dept_job_role_tbl %>%
   count(Department, JobRole, Attrition) %>% 
   count_to_pct(Department, JobRole) %>% 
   assess_attrition(Attrition, 
                    attrition_value = "Yes", 
                    baseline_pct = 0.088) %>% 
-  mutate(
-    cost = calculate_attrition_costs(n = n, 
-                                     salary = 80000)
-  )
+  mutate(cost = calculate_attrition_costs(n = n, 
+                                          salary = 80000))
 
 # Visualization of Attrition Cost ----
 
@@ -249,20 +238,103 @@ dept_job_role_tbl %>%
   # Data Manipulation 
   mutate(name = str_c(Department, JobRole, sep = ": ") %>% as_factor()) %>%
   mutate(name = fct_reorder(name, cost_of_attrition)) %>% 
-  mutate(cost_text = str_c("$", format(cost_of_attrition / 1e6, digits = 2),
+  mutate(cost_text = str_c(format(cost_of_attrition / 1e6, digits = 2),
                            "M", sep = "")) %>% 
   
   # Plotting
   ggplot(aes(x = cost_of_attrition, y = name)) +
-  geom_segment(aes(xend = 0, yend = name), color = palette_light()[[1]]) +
-  geom_point(aes(size = cost_of_attrition), color = palette_light()[[1]]) +
+  geom_segment(aes(xend = 0, yend = name), 
+               color = palette_light()[[2]]) +
+  geom_point(aes(size = cost_of_attrition), 
+             color = palette_light()[[2]]) +
   scale_x_continuous(labels = scales::dollar) + 
   geom_label(aes(label = cost_text, size = cost_of_attrition),
-             hjust = "inward", , color = palette_light()[[1]]) +
+             hjust = "inward", 
+             color = palette_light()[[2]]) +
   theme_tq() +
   scale_size(range = c(3, 5)) + 
   labs(title = "Estimated Cost of Attrition by Department and Job Role",
        y = "",
        x = "Cost of Attrition") +
   theme(legend.position = "none")
->>>>>>> 0b4f6e418038190661feac05f9bd3ce2dbc599ed
+
+# Custom Plotting function ----
+
+plot_attrition <- function(data, ..., .value,
+                           fct_reorder = TRUE,
+                           fct_rev = FALSE,
+                           include_lbl = TRUE,
+                           color = palette_light()[[1]],
+                           units = c("0", "K", "M")) {
+    # Inputs 
+    
+    group_vars_expr <- quos(...)  # captures column names, doesn't DO anything with them
+    if (length(group_vars_expr) == 0)
+        group_vars_expr <- quos(rlang::sym(colnames(data)[[1]]))
+    
+    value_expr <- enquo(.value)
+    value_name <- quo_name(value_expr) 
+    
+    units_val <- switch(units[[1]],
+                        "M" = le6,
+                        "K" = le3,
+                        "0" = le1)
+    if (units[[1]] == "0", units <- "")
+    
+    # Data Manipulation 
+    usd <- scales::dollar_format(prefix = "$", largest_with_cents = 1e3)
+        
+    data_manipulated <- data %>% 
+        mutate(name = str_c( (!!! group_vars_expr), sep = ": ") %>% as_factor()) %>%
+        mutate(cost_text = str_c(usd(value_expr / units_val),
+                                 units[[1]], sep = "")) %>% 
+    
+        if (fct_reorder) {
+            data_manipulated <- data_manipulated %>% 
+                mutate(name = forcats::fct_reorder(name, !! value_expr)) %>%
+                arrange(name)
+        }
+    
+        if (fct_rev) {
+            data_manipulated <- data_manipulated %>% 
+                mutate(name = forcats::fct_rev(name)) %>%
+                arrange(name)
+        }
+    
+    
+    # Visualization 
+    
+    
+    
+    # Plotting
+    ggplot(aes(x = cost_of_attrition, y = name)) +
+    geom_segment(aes(xend = 0, yend = name), 
+                 color = palette_light()[[2]]) +
+    geom_point(aes(size = cost_of_attrition), 
+               color = palette_light()[[2]]) +
+    scale_x_continuous(labels = scales::dollar) + 
+    geom_label(aes(label = cost_text, size = cost_of_attrition),
+               hjust = "inward", 
+               color = palette_light()[[2]]) +
+    theme_tq() +
+    scale_size(range = c(3, 5)) + 
+    labs(title = "Estimated Cost of Attrition by Department and Job Role",
+         y = "",
+         x = "Cost of Attrition") +
+    theme(legend.position = "none")  
+  
+}
+
+dept_job_role_tbl %>% 
+  
+  count(Department, JobRole, Attrition) %>% 
+  count_to_pct(Department, JobRole) %>% 
+  assess_attrition(Attrition, attrition_value = "Yes", baseline_pct = 0.088) %>% 
+  mutate(
+    cost_of_attrition = calculate_attrition_costs(n = n, 
+                                                  salary = 80000)
+    )%>% 
+  
+  plot_attrition(Department, Jobrole, .value = cost_of_attrition, 
+                 units = "M")
+
