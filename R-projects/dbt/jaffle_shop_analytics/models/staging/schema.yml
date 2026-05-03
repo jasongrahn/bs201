@@ -1,0 +1,32 @@
+version: 2
+models:
+  - name: stg_customers
+    description: "Staged customer data"
+    columns:
+      - name: customer_id
+        description: "Primary key"
+        tests:
+          - unique
+          - not_null
+      - name: email
+        tests:
+          - unique
+  - name: stg_orders
+    description: "Staged order data"
+    columns:
+      - name: order_id
+        tests:
+          - unique
+          - not_null
+      - name: status
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['completed', 'shipped', 'returned', 'placed']
+  - name: stg_payments
+    columns:
+      - name: payment_method
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['credit_card', 'coupon', 'bank_transfer', 'gift_card']

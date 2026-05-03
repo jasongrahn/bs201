@@ -1,0 +1,36 @@
+[0m12:08:19.666200 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x1066412b0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10753bb10>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x10753bd90>]}
+
+
+============================== 12:08:19.670887 | 753fe040-67b6-4771-a737-8f28aafb0049 ==============================
+[0m12:08:19.670887 [info ] [MainThread]: Running with dbt=1.11.8
+[0m12:08:19.671154 [debug] [MainThread]: running dbt with arguments {'warn_error': 'None', 'indirect_selection': 'eager', 'send_anonymous_usage_stats': 'True', 'warn_error_options': 'WarnErrorOptionsV2(error=[], warn=[], silence=[])', 'static_parser': 'True', 'partial_parse': 'True', 'printer_width': '80', 'use_colors': 'True', 'log_path': 'logs', 'log_format': 'default', 'empty': 'None', 'use_experimental_parser': 'False', 'profiles_dir': '/Users/jasongrahn/.dbt', 'fail_fast': 'False', 'version_check': 'True', 'cache_selected_only': 'False', 'log_cache_events': 'False', 'introspect': 'True', 'target_path': 'None', 'quiet': 'False', 'no_print': 'None', 'debug': 'False', 'invocation_command': 'dbt init jaffle_shop_analytics', 'write_json': 'True'}
+[0m12:08:19.674989 [info ] [MainThread]: Creating dbt configuration folder at /Users/jasongrahn/.dbt
+[0m12:08:19.675543 [debug] [MainThread]: Starter project path: /Users/jasongrahn/R-projects/dbt/dbt_env/lib/python3.13/site-packages/dbt/include/starter_project
+[0m12:08:19.677389 [info ] [MainThread]: 
+Your new dbt project "jaffle_shop_analytics" was created!
+
+For more information on how to configure the profiles.yml file,
+please consult the dbt documentation here:
+
+  https://docs.getdbt.com/docs/configure-your-profile
+
+One more thing:
+
+Need help? Don't hesitate to reach out to us via GitHub issues or on Slack:
+
+  https://community.getdbt.com/
+
+Happy modeling!
+
+[0m12:08:19.677513 [info ] [MainThread]: Setting up your profile.
+[0m12:08:35.192327 [info ] [MainThread]: Profile jaffle_shop_analytics written to /Users/jasongrahn/.dbt/profiles.yml using target's sample configuration. Once updated, you'll be able to start developing with dbt.
+[0m12:08:35.279045 [debug] [MainThread]: Resource report: {"command_name": "init", "command_success": true, "command_wall_clock_time": 15.639771, "process_in_blocks": "0", "process_kernel_time": 0.114556, "process_mem_max_rss": "132136960", "process_out_blocks": "0", "process_user_time": 0.785535}
+[0m12:08:35.279739 [debug] [MainThread]: Command `dbt init` succeeded at 12:08:35.279607 after 15.64 seconds
+[0m12:08:35.280135 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x107667bb0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x1076cbd10>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x107770af0>]}
+[0m12:08:35.280554 [debug] [MainThread]: Flushing usage events
+[0m12:08:35.535751 [debug] [MainThread]: An error was encountered while trying to flush usage events
+{"data":{"log_version":3,"version":"=2.0.0-preview.173"},"info":{"category":"","code":"A001","extra":{},"invocation_id":"019dcc26-e6c8-7352-9223-419b07f117ab","level":"info","msg":"Running with dbt-fusion=2.0.0-preview.173","name":"MainReportVersion","pid":96107,"thread":"tokio-rt-worker","ts":"2026-04-26T23:36:34.765738Z"}}
+{"data":{"args":{"debug":"false","invocation_command":"/Users/jasongrahn/.local/bin/dbt license info --json --log-format json","log_format":"json","quiet":"false","write_json":"true"}},"info":{"category":"","code":"A002","extra":{},"invocation_id":"019dcc26-e6c8-7352-9223-419b07f117ab","level":"debug","msg":"running dbt-fusion with argumets {\"command\":\"license\",\"vars\":\"{}\",\"limit\":\"10\",\"debug\":false,\"log_format\":\"json\",\"quiet\":false,\"write_json\":true,\"write_catalog\":false}","name":"MainReportArgs","pid":96107,"thread":"tokio-rt-worker","ts":"2026-04-26T23:36:34.765751Z"}}
+{"data":{},"info":{"category":"","code":"","extra":{},"invocation_id":"019dcc26-e6c8-7352-9223-419b07f117ab","level":"debug","msg":"No active cloud project configured, skipping remote license","name":"Generic","pid":96107,"thread":"tokio-rt-worker","ts":"2026-04-26T23:36:34.767456Z"}}
+{"data":{"columns":[],"is_inline":true,"node_name":"license_info","output_format":"json","preview":"{\n  \"status\": \"not_found\",\n  \"licensing_enabled\": true\n}","unique_id":"license.info"},"info":{"category":"","code":"Q041","extra":{},"invocation_id":"019dcc26-e6c8-7352-9223-419b07f117ab","level":"info","msg":"{\n  \"status\": \"not_found\",\n  \"licensing_enabled\": true\n}","name":"ShowNode","pid":96107,"thread":"tokio-rt-worker","ts":"2026-04-26T23:36:34.767864Z"}}
+{"data":{"completed_at":"2026-04-26T23:36:34.997248Z","elapsed":0.23214200139045715,"success":true},"info":{"category":"","code":"Q039","extra":{},"invocation_id":"019dcc26-e6c8-7352-9223-419b07f117ab","level":"info","msg":"\n==================== Execution Summary =====================\nFinished 'license' successfully [232ms]","name":"CommandCompleted","pid":96107,"thread":"tokio-rt-worker","ts":"2026-04-26T23:36:34.997732Z"}}
